@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestadorDLL", "TestadorDLL\TestadorDLL.csproj", "{7CCD743B-D5B6-4249-8BB0-3A38C7672525}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7CCD743B-D5B6-4249-8BB0-3A38C7672525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CCD743B-D5B6-4249-8BB0-3A38C7672525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CCD743B-D5B6-4249-8BB0-3A38C7672525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CCD743B-D5B6-4249-8BB0-3A38C7672525}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C42C6685-108E-4943-8D15-A84A27B7AB79}
+	EndGlobalSection
+EndGlobal
