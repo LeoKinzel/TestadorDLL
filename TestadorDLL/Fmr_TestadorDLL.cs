@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
+using System.IO;
+
 
 
 namespace TestadorDLL
@@ -79,7 +81,7 @@ namespace TestadorDLL
             {
                try
                   {
-
+               
                     String DLL_Nome;                 //Arquivo *.dll
                     String Namespace;                //Namespace da DLL
                     String Classe_MAP;               //Namespace.MAP da DLL
@@ -98,7 +100,7 @@ namespace TestadorDLL
 
                     Lbl_mapLoad.Text = "Mapeamento em Andamento...";
                     
-                    if(checkB_CrossID.Checked == false)
+                    if(checkB_CrossID.Checked == false && checkB_JSON.Checked == false)
                     {
                         //EXECUTA O MÉTODO RUN DA CLASSE MAP COM DOIS PARÂMETROS
                         MapType.InvokeMember("Run", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, mapa, new object[] { textBox1.Text, diretorioArquivoInput + "RESULTADO.TXT" }); //OK
@@ -111,7 +113,7 @@ namespace TestadorDLL
                     }
                     if(checkB_CrossID.Checked == true)
                     {
-                        //EXECUTA O MÉTODO RUN DA CLASSE MAP COM DOIS PARÂMETROS
+                        //EXECUTA O MÉTODO RUN DA CLASSE MAP COM TRÊS PARÂMETROS
                         MapType.InvokeMember("Run", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, mapa, new object[] { textBox1.Text, Lbl_DiretorioCrossID.Text, diretorioArquivoInput + "RESULTADO.TXT" }); //OK
 
                         //LÊ O CONTEUDO DO ARQUIVO E PRINTA NA TELA
@@ -120,12 +122,31 @@ namespace TestadorDLL
                         //PRINTA ONDE FOI SALVO O ARQUIVO RESULTADO
                         Lbl_mapLoad.Text = "Arquivo Mapeado gerado em: " + diretorioArquivoInput + "Resultado.txt";
                     }
-                   
-                  }catch(Exception ex)
+                    if (checkB_JSON.Checked == true)
                     {
-                        Lbl_mapLoad.Text = "Houve um erro no mapeamento!";
-                        Txt_ConteudoArquivoMapeado.Text = "";
+                        geraArquivoTempJson(diretorioArquivoInput);
+
+                        MapType.InvokeMember("Run", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, mapa, new object[] {diretorioArquivoInput + "arquivoReferenciado.temp", textBox1.Text, diretorioArquivoInput + "RESULTADO.TXT" });
+
+                        Txt_ConteudoArquivoMapeado.Text = System.IO.File.ReadAllText(diretorioArquivoInput + "RESULTADO.TXT");
+
+                        Lbl_mapLoad.Text = "Arquivo Mapeado gerado em: " + diretorioArquivoInput + "Resultado.txt";
+
+                        deletaArquivoTempJson(diretorioArquivoInput);
                     }
+                   
+                  }
+                catch(System.IO.FileLoadException ex)
+                {
+                    MessageBox.Show("Possivelmente a DLL ou o arquivo está bloqueado. Necessário Desbloquear!\n\nDebloqueie os arquivos necessários e reinicie o programa.");
+                    Lbl_mapLoad.Text = "Houve um erro de acesso a um dos arquivos!";
+                }
+                
+                catch(Exception ex)
+                {
+                    Lbl_mapLoad.Text = "Houve um erro no mapeamento!";
+                    Txt_ConteudoArquivoMapeado.Text = "";
+                }
 
             }
 
@@ -141,13 +162,6 @@ namespace TestadorDLL
             Lbl_DiretorioCrossID.Text = "";
         }
 
-        private void checkB_CrossID_CheckedChanged(object sender, EventArgs e)
-        {
-            Btn_CrossID.Enabled = !Btn_CrossID.Enabled;
-            Lbl_DiretorioCrossID.Enabled = !Lbl_DiretorioCrossID.Enabled;
-            Lbl_DiretorioCrossID.Text = "";
-        }
-
         private void Btn_CrossID_Click(object sender, EventArgs e)
         {
             FileDialog_ArquivoEntrada.ShowDialog();
@@ -158,5 +172,54 @@ namespace TestadorDLL
         {
 
         }
+
+        private void checkB_CrossID_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkB_CrossID.Checked)
+            {
+                checkB_JSON.Checked = false;
+            }
+            habilitaCrossID(checkB_CrossID.Checked);
+        }
+
+        private void checkB_JSON_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkB_JSON.Checked)
+            {
+                checkB_CrossID.Checked = false;
+            }
+            habilitaCrossID(checkB_CrossID.Checked);
+        }
+
+        private void habilitaCrossID(bool ligar)    //Método que habilita o mapeamento com crossID
+        {
+            Btn_CrossID.Enabled = ligar;
+            Lbl_DiretorioCrossID.Enabled = ligar;
+            Lbl_DiretorioCrossID.Text = "";
+        }
+
+        private void geraArquivoTempJson(string diretorio)
+        {
+            using (StreamWriter arquivoReferenciado = File.CreateText(diretorio + "arquivoReferenciado.temp"))
+            {
+                arquivoReferenciado.WriteLine("{");
+                arquivoReferenciado.WriteLine("  \"requestId\": \"4789cf7a-6310-4ab4-9f43-d6a737454871\",");
+                arquivoReferenciado.WriteLine("  \"requestIdExpires\": \"2022-02-17T19:55:22.2559263+00:00\",");
+                arquivoReferenciado.WriteLine("  \"data\": {");
+                arquivoReferenciado.WriteLine("    \"idMetaArquivoReferenciado\": 85236586,");
+                arquivoReferenciado.WriteLine("    \"idMeta\": 85236586");
+                arquivoReferenciado.WriteLine("  }");
+                arquivoReferenciado.WriteLine("}");
+            }
+        }
+
+        private void deletaArquivoTempJson(string diretorio)
+        {
+            if (File.Exists(diretorio + "arquivoReferenciado.temp"))
+            {
+                File.Delete(diretorio + "arquivoReferenciado.temp");
+            }
+        }
+        
     }
 }

@@ -48,6 +48,7 @@
             this.Lbl_CrossID = new System.Windows.Forms.Label();
             this.Lbl_DiretorioCrossID = new System.Windows.Forms.TextBox();
             this.Btn_CrossID = new System.Windows.Forms.Button();
+            this.checkB_JSON = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // Lbl_DiretorioDLL
@@ -237,12 +238,24 @@
             this.Btn_CrossID.UseVisualStyleBackColor = true;
             this.Btn_CrossID.Click += new System.EventHandler(this.Btn_CrossID_Click);
             // 
+            // checkB_JSON
+            // 
+            this.checkB_JSON.AutoSize = true;
+            this.checkB_JSON.Location = new System.Drawing.Point(873, 86);
+            this.checkB_JSON.Name = "checkB_JSON";
+            this.checkB_JSON.Size = new System.Drawing.Size(84, 17);
+            this.checkB_JSON.TabIndex = 17;
+            this.checkB_JSON.Text = "Mapa JSON";
+            this.checkB_JSON.UseVisualStyleBackColor = true;
+            this.checkB_JSON.CheckedChanged += new System.EventHandler(this.checkB_JSON_CheckedChanged);
+            // 
             // Fmr_TestadorDLL
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ClientSize = new System.Drawing.Size(1073, 637);
+            this.Controls.Add(this.checkB_JSON);
             this.Controls.Add(this.Btn_CrossID);
             this.Controls.Add(this.Lbl_DiretorioCrossID);
             this.Controls.Add(this.Lbl_CrossID);
@@ -293,6 +306,7 @@
         private System.Windows.Forms.Label Lbl_CrossID;
         private System.Windows.Forms.TextBox Lbl_DiretorioCrossID;
         private System.Windows.Forms.Button Btn_CrossID;
+        private System.Windows.Forms.CheckBox checkB_JSON;
     }
 }
 
